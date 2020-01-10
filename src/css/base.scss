@@ -1,8 +1,11 @@
 /* This is an example of using Sass, otherwise plain CSS works too*/
-$darkBlue: rgba(113, 148, 212, .9);
+$darkBlue: rgba(113, 148, 212, .7);
 $lightBlue: rgba(198, 205, 247, 1);
 $brown: rgba(217, 164, 152, 1);
 $pink: rgba(230, 160, 196, 1);
+$black: rgba(0, 0, 0, .7);
+$mountainBack: url(../images/purple-mountain.jpg);
+$treesBack: url(../images/hillside-hotel.jpg);
 
 * {
   margin: 0;
@@ -15,7 +18,7 @@ html {
 }
 
 body {
-  background: url(../images/purple-mountain.jpg);
+  background: $treesBack;
   background-size: cover;
   height: 100%;
   display: flex;
@@ -24,6 +27,7 @@ body {
   flex-direction: column;
 }
 
+// Login page css move to separate file
 .login {
   background: linear-gradient($darkBlue, $darkBlue);
   height: 60%;
@@ -61,7 +65,7 @@ body {
   &:focus {
     outline: none;
     border: none;
-    box-shadow: 0.2rem 0.4rem 0.8rem $lightBlue;
+    box-shadow: 0.1rem 0.3rem 0.6rem $lightBlue;
   }
 }
 
@@ -80,7 +84,53 @@ body {
 
   &:hover {
     color: $brown;
-    // box-shadow: 5px 40px -10px;
     transition: all 0.4s ease 0s;
   }
+}
+
+// User page move to separate file
+.main {
+  height: 90%;
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10%; 
+}
+
+.nav {
+  height: 15%;
+  width: 100%;
+  // background: linear-gradient($darkBlue, $darkBlue);
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard {
+  height: 85%;
+  width: 100%;
+  background: linear-gradient($black, $black); 
+}
+
+.nav-btn {
+  width: 30%;
+  height: 100%;
+  font-size: 2em;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  color: $lightBlue;
+  border-bottom: 3px solid $brown;
+  background: linear-gradient($darkBlue, $darkBlue); 
+
+  &:hover {
+    background: linear-gradient($black, $black);
+    border: none;
+  }
+}
+
+.nav-logo {
+  width: 10%;
+  height: 100%;
+  border-bottom: 3px solid $brown;
+  background: linear-gradient($darkBlue, $darkBlue); 
 }
