@@ -90,4 +90,8 @@ describe('User', function () {
     }]);
   });
 
+  it('should have a name', () => {
+    expect(user.calculateRewardsTotal(hotel)).to.equal(849.54);
+  });
+
 })
