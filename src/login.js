@@ -1,5 +1,6 @@
 import $ from 'jquery';
-const hotelData = {};
+import User from '../classes/user.js';
+import Hotel from '../classes/hotel.js';
 
 const validateLogin = (e) => {
   e.preventDefault()
@@ -7,7 +8,7 @@ const validateLogin = (e) => {
   const password = $('.login-password').val();
 
   if (username && password === 'overlook2019') {
-    console.log('passed')
+    retrieveUserData(username);
   } else {
     console.log('Please enter value');
   }
@@ -15,23 +16,27 @@ const validateLogin = (e) => {
 
 $('.login-submit').on('click', validateLogin);
 
-const linkUser = (username) => {
+const linkUser = (username, userData) => {
   const userID = username.match(/\d+/)[0];
-
-  //has to trigger another function within the fetch 
+  const userInfo = userData.find(user => user.id === userID);
+  return new User(userInfo);
 }
 
-const loadDashboard = () => {
+const loadDashboard = (username, data) => {
   //push to a small repo 
+  const user = linkUser(username, data.users);
+  const hotel = new Hotel('Grandiose Sarajevo Motel', data.rooms, data.bookings);
+
 }
 
-const retrieveUserData = () => {
+const retrieveUserData = (username) => {
   let urls = {
     userData: 'https://fe-apps.herokuapp.com/api/v1/overlook/1904/users/users',
     roomData: 'https://fe-apps.herokuapp.com/api/v1/overlook/1904/rooms/rooms',
     bookingData: 'https://fe-apps.herokuapp.com/api/v1/overlook/1904/bookings/bookings',
   }
 
+  const hotelData = {};
   const dataFetches = Object.keys(urls).map(url => fetch(urls[url]));
   Promise.all(dataFetches)
     .then(responses => responses.map(response => response.json()))
@@ -41,7 +46,9 @@ const retrieveUserData = () => {
           hotelData[Object.keys(data)[0]] = data[Object.keys(data)[0]]
         })
       })
-      console.log(hotelData)
+      loadDashboard(username, hotelData)
     })
     .catch(err => console.log(err))
+    //throw exception on catch, offer alert on UI to refresh, dont proceed until loaded 
 }
+
