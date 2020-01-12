@@ -141,4 +141,8 @@ describe('Hotel', function () {
       costPerNight: 429.44
     }]);
   });
+
+  it('should be able to calculate percentage of rooms booked', () => {
+    expect(hotel.calcPercRoomsBooked('2020/01/24')).to.deep.equal(.25);
+  });
 })
