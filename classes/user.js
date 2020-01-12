@@ -4,12 +4,12 @@ class User {
     this.name = userData.name;
   }
 
-  findReservations(hotel) {
+  findPersonalReservations(hotel) {
     return hotel.bookings.filter(booking => booking.userID === this.id);
   }
 
   calculateRewardsTotal(hotel) {
-    const userRes = this.findReservations(hotel);
+    const userRes = this.findPersonalReservations(hotel);
     return userRes.reduce((acc, res) => {
       hotel.rooms.forEach(room => {
         if (room.number === res.roomNumber) {
