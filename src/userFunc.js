@@ -22,7 +22,6 @@ $('.login-submit').on('click', validateLogin);
 const linkUser = (username, userData) => {
   const userID = username.match(/\d+/)[0];
   const userInfo = userData.find(user => user.id === parseInt(userID));
-  console.log('userFind', userInfo)
   return new User(userInfo);
 }
 
@@ -50,7 +49,6 @@ const retrieveUserData = (username) => {
   
   Promise.all(dataFetches)
     .then(data => {
-      console.log('dataBefore', data)
       unpackData(username, data);
     })
 }
@@ -66,6 +64,15 @@ const generateUserPage = () => {
       <section class="dashboard">
       
       </section>
+    </section>`);
+}
+
+const createResCard = () => {
+  //need to use .after on .card unless it's the first card?
+  $('dash').html(`<section class='dash-card'>
+    <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
+    <p class="dash-p-resDate">2020/06/01</p>
+    <p class="dash-p-roomType">Single Room</p>
     </section>`);
 }
 
