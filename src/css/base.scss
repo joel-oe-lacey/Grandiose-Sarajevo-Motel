@@ -88,7 +88,6 @@ body {
   }
 }
 
-// User page move to separate file
 .main {
   height: 90%;
   width: 95%;
@@ -105,32 +104,54 @@ body {
   flex-direction: row;
 }
 
-.dashboard {
-  height: 85%;
-  width: 100%;
-  background: linear-gradient($black, $black); 
-}
-
 .nav-btn {
-  width: 30%;
-  height: 100%;
-  font-size: 2em;
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  color: $lightBlue;
-  border-bottom: 3px solid $brown;
-  background: linear-gradient($darkBlue, $darkBlue); 
-
-  &:hover {
-    background: linear-gradient($black, $black);
+    width: 30%;
+    height: 100%;
+    font-size: 2em;
+    text-decoration: none;
+    background: transparent;
     border: none;
-  }
+    color: $lightBlue;
+    border-bottom: 3px solid $brown;
+    background: linear-gradient($darkBlue, $darkBlue); 
+    
+    &:hover {
+        background: linear-gradient($black, $black);
+        border: none;
+    }
 }
 
 .nav-logo {
-  width: 10%;
-  height: 100%;
-  border-bottom: 3px solid $brown;
-  background: linear-gradient($darkBlue, $darkBlue); 
+    width: 10%;
+    height: 100%;
+    border-bottom: 3px solid $brown;
+    background: linear-gradient($darkBlue, $darkBlue); 
 }
+
+.dash {
+  height: 85%;
+  width: 100%;
+  background: linear-gradient($black, $black); 
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  overflow: scroll;
+}
+
+.dash-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  height: 15%;
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2%;
+}
+
+.dash-img {
+  height: 80%;
+  width: 30%;
+}
+
