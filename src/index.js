@@ -2,7 +2,7 @@
 // Do not delete or rename this file ********
 
 // An example of how you import jQuery into a JS file if you use jQuery in that file
-import $ from 'jquery';
+// import $ from 'jquery';
 
 // An example of how you tell webpack to use a CSS (SCSS) file
 import './css/base.scss';
@@ -13,7 +13,7 @@ import './images/hotel-logo.svg'
 import './images/purple-mountain.jpg'
 import './images/hillside-hotel.jpg'
 
-import './login.js'
-import './user-interface.js'
+// import './login.js'
+import './userFunc.js'
 
 console.log('This is the JavaScript entry file - your code begins here.');
