@@ -76,6 +76,18 @@ const createResCard = () => {
     </section>`);
 }
 
+const displayUserStats = () => {
+  //need to build out more with more info, styling dependent on time
+  $('dash').html(`<section class="dash">
+    <section class="dash-rewards">
+        <h3 class="rewards-h3">75%</h3>
+    </section>
+    <section class="dash-userInfo">
+        <h3 class='userInfo-h3'>Joel</h3>
+    </section>
+    </section>`);
+}
+
 const displayBookings = () => {
   $('.dashboard').html(`<p class="dashboard-hold">test</p>`);
 }
