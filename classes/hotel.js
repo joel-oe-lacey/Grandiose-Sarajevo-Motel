@@ -15,6 +15,12 @@ class Hotel {
     return this.rooms.filter(room => !reservations.includes(room.number))
   }
 
+  calcPercRoomsBooked(date) {
+    const availCount = this.findAvailableRooms(date).length;
+    const roomCount = this.rooms.length;
+    return (roomCount - availCount) / roomCount;
+  }
+
   filterRooms(type) {
     return this.rooms.filter(room => room.roomType === type);
   }
