@@ -13,5 +13,7 @@ import './images/hotel-logo.svg'
 import './images/purple-mountain.jpg'
 import './images/hillside-hotel.jpg'
 
+import './login.js'
+import './user-interface.js'
 
 console.log('This is the JavaScript entry file - your code begins here.');
