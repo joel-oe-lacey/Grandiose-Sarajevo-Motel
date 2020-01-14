@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import User from '../classes/user.js';
+import Manager from '../classes/manager.js';
 import Hotel from '../classes/hotel.js';
 import Booking from '../classes/booking.js';
 let user, bookings, hotel;
@@ -10,34 +11,53 @@ const validateLogin = (e) => {
   const password = $('.login-password').val();
 
   if (username && password === 'overlook2019') {
-    retrieveUserData(username);
+    checkUserType(username);
+    fetchCurrDate();
   } else {
     console.log('Please enter value');
   }
 };
 
+const checkUserType = (username) => {
+  if (username === 'manager') {
+    retrieveUserData(username, 'manager')
+  } else {
+    retrieveUserData(username, 'user')
+  }
+}
+
 $('.login-submit').on('click', validateLogin);
 
-const linkUser = (username, userData) => {
-  const userID = username.match(/\d+/)[0];
-  const userInfo = userData.find(user => user.id === parseInt(userID));
-  return new User(userInfo);
+const linkUser = (username, userType, userData) => {
+  if (userType === 'user') {
+    const userID = username.match(/\d+/)[0];
+    const userInfo = userData.find(user => user.id === parseInt(userID));
+    return new User(userInfo);
+  } else {
+    return new Manager({id: 51, name: 'mr.manager'});
+  }
 };
 
-const unpackData = (username, data) => {
-  const userInst = linkUser(username, data[0].users);
+const unpackData = (username, userType, data) => {
+  const userInst = linkUser(username, userType, data[0].users);
   const bookingInst = data[2].bookings.map(booking => new Booking(booking));
   const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, bookingInst);
 
   bookings = bookingInst;
   hotel = hotelInst;
   user = userInst;
-  generateUserPage();
-  // selectedBtnStyle('nav-booking');
-  displayUserResv();
+
+  if (userType === 'manager') {
+    generateManagerPage();
+    displayUserResv('manager');
+  } else {
+    generateUserPage();
+    // selectedBtnStyle('nav-booking');
+    displayUserResv('user');
+  }
 };
 
-const retrieveUserData = (username) => {
+const retrieveUserData = (username, userType) => {
   const urls = {
     userData: 'https://fe-apps.herokuapp.com/api/v1/overlook/1904/users/users',
     roomData: 'https://fe-apps.herokuapp.com/api/v1/overlook/1904/rooms/rooms',
@@ -51,10 +71,11 @@ const retrieveUserData = (username) => {
   
   Promise.all(dataFetches)
     .then(data => {
-      unpackData(username, data);
+      unpackData(username, userType, data);
     })
 };
 
+//refactor to single function?
 const generateUserPage = () => {
   $('body').html(`<section class="main">
     <nav class="nav">
@@ -69,11 +90,41 @@ const generateUserPage = () => {
     </section>`);
 };
 
-const displayUserResv = () => {
-  generateUserPage()
-  const userResInst = user.findPersonalReservations(hotel);
-  createUserRes(userResInst);
+const generateManagerPage = () => {
+  $('body').html(`<section class="main">
+    <nav class="nav">
+      <img class="nav-logo" src="./images/hotel-logo.svg" alt="A hotel on top of a mountain with a train ascending to it">
+        <button class="nav-avail nav-btn">Available Rooms</button>
+        <button class="nav-operations nav-btn">Operations</button>
+        <button class="nav-manage nav-btn">Manage Bookings</button>
+        </nav>
+      <section class="dash">
+      <section class= 'dash-card-list' ></section>
+      </section>
+    </section>`);
 };
+
+const displayUserResv = (userType) => {
+  if (userType === 'manager') {
+    const currDate = fetchCurrDate();
+    const allRes = hotel.findReservationsByDate(currDate);
+    generateManagerPage()
+    createUserRes(allRes);
+  } else {
+    generateUserPage()
+    const userResInst = user.findPersonalReservations(hotel);
+    createUserRes(userResInst);
+  }
+};
+
+const fetchCurrDate = () => {
+  let today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); 
+  const yyyy = today.getFullYear();
+  today = yyyy + '/' + mm + '/' + dd;
+  return today;
+}
 
 const createResCard = (resDate, roomNum, roomType) => {
   $('.dash-card-list').append(`<section class='dash-card'>
