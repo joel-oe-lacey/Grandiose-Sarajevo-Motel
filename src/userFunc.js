@@ -240,10 +240,15 @@ $(document).on('input', '.form-input-user', updateMngPage);
 const displayAvailRooms = () => {
   const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
   const availRooms = hotel.findAvailableRooms(date);
-
   $('.dash-results').html('');
-  availRooms.forEach(room => createRoomCard(room.number, room.bedSize, room.numBeds, room.costPerNight))
+  if (availRooms.length) {
+    availRooms.forEach(room => createRoomCard(room.number, room.bedSize, room.numBeds, room.costPerNight))
+  } else {
+    $('.dash-results').append('<h2>Our sincerest apologies, it seems there are no rooms available for the date you’ve selected. I’d give you my room if I had one, but I don’t, since sleeping would be a moment spent not helping our most valued patrons. Please do consider choosing another date to stay with us and I will personally order you a cake from Mendl’s to show my gratitude.</h2>');
+  }
 }
+
+
 
 //swap room num for room type once done debugging
 //currently not finding right avail rooms. 

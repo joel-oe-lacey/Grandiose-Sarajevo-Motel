@@ -212,4 +212,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  h2 {
+    width: 80%;
+    height: 80%;
+    color: $lightBlue;
+  }
 }
