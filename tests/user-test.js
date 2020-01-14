@@ -74,7 +74,7 @@ describe('User', function () {
   });
   
   it('should find all user reservations', () => {
-    expect(user.findReservations(hotel)).to.deep.equal([{
+    expect(user.findPersonalReservations(hotel)).to.deep.equal([{
       id: "5fwrgu4i7k55hl6sz",
       userID: 1,
       date: "2020/02/04",
@@ -90,8 +90,9 @@ describe('User', function () {
     }]);
   });
 
-  it('should have a name', () => {
-    expect(user.calculateRewardsTotal(hotel)).to.equal(849.54);
-  });
+  it('should calculate total amount spent', () => {
+    const userRes = user.findPersonalReservations(hotel);
 
+    expect(user.calculateRewardsTotal(userRes, hotel)).to.equal(849.54);
+  });
 })
