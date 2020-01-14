@@ -1,8 +1,13 @@
 class Hotel {
-  constructor(name, rooms, bookings) {
+  constructor(name, rooms, bookings, allGuests) {
     this.name = name;
     this.rooms = rooms;
-    this.bookings = bookings;    
+    this.bookings = bookings;
+    this.guests = allGuests;   
+  }
+
+  findGuest(username) {
+    return this.guests.find(guest => guest.name === username);
   }
 
   findReservationsByDate(date) {
@@ -14,12 +19,6 @@ class Hotel {
     const reservations = this.findReservationsByDate(date).map(res => res.roomNumber);
 
     return this.rooms.filter(room => !reservations.includes(room.number))
-  }
-
-  calcPercRoomsBooked(date) {
-    const availCount = this.findAvailableRooms(date).length;
-    const roomCount = this.rooms.length;
-    return (roomCount - availCount) / roomCount;
   }
 
   filterRooms(type) {
