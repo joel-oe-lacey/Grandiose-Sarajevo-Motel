@@ -16,7 +16,7 @@ class User {
         }
       });
       return acc;
-    }, 0)
+    }, 0).toFixed(2);
   }
 }
 
