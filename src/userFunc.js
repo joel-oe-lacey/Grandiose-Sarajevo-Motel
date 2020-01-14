@@ -14,7 +14,7 @@ const validateLogin = (e) => {
   } else {
     console.log('Please enter value');
   }
-}
+};
 
 $('.login-submit').on('click', validateLogin);
 
@@ -22,7 +22,7 @@ const linkUser = (username, userData) => {
   const userID = username.match(/\d+/)[0];
   const userInfo = userData.find(user => user.id === parseInt(userID));
   return new User(userInfo);
-}
+};
 
 const unpackData = (username, data) => {
   const userInst = linkUser(username, data[0].users);
@@ -35,7 +35,7 @@ const unpackData = (username, data) => {
   generateUserPage();
   // selectedBtnStyle('nav-booking');
   displayUserResv();
-}
+};
 
 const retrieveUserData = (username) => {
   const urls = {
@@ -53,7 +53,7 @@ const retrieveUserData = (username) => {
     .then(data => {
       unpackData(username, data);
     })
-}
+};
 
 const generateUserPage = () => {
   $('body').html(`<section class="main">
@@ -67,13 +67,13 @@ const generateUserPage = () => {
       <section class= 'dash-card-list' ></section>
       </section>
     </section>`);
-}
+};
 
 const displayUserResv = () => {
   generateUserPage()
   const userResInst = user.findPersonalReservations(hotel);
   createUserRes(userResInst);
-}
+};
 
 const createResCard = (resDate, roomNum, roomType) => {
   $('.dash-card-list').append(`<section class='dash-card'>
@@ -82,27 +82,32 @@ const createResCard = (resDate, roomNum, roomType) => {
     <p class="dash-p-roomNum">Room Number: ${roomNum}</p>
     <p class="dash-p-roomType">${roomType}</p>
     </section>`);
-}
+};
 
 const createUserRes = (bookings) => {
   bookings.forEach(booking => createResCard(booking.date, booking.roomNumber, 'test'))
-}
+};
 
 $(document).on('click', '.nav-reservation', displayUserResv);
 
-const displayUserStats = () => {
+const fetchUserStats = () => {
+  const userRes = user.findPersonalReservations(hotel);
+  const rewardsTot = user.calculateRewardsTotal(userRes, hotel);
+  displayUserStats(rewardsTot, user.name);
+};
+
+const displayUserStats = (rewardsStat, user) => {
   //need to build out more with more info, styling dependent on time
-  $('.dash').html(`<section class="dash">
+  $('.dash').html(`
     <section class="dash-rewards">
-        <h3 class="rewards-h3">75%</h3>
+        <h3 class="rewards-h3">Total Spent: ${rewardsStat}</h3>
     </section>
     <section class="dash-userInfo">
-        <h3 class='userInfo-h3'>Joel</h3>
-    </section>
+        <h3 class='userInfo-h3'>${user}</h3>
     </section>`);
-}
+};
 
-$(document).on('click', '.nav-account', displayUserStats);
+$(document).on('click', '.nav-account', fetchUserStats);
 
 const generateBookingPage = () => {
   $('.dash').html(`<form class="dash-form">
@@ -118,9 +123,32 @@ const generateBookingPage = () => {
   </form>
   <section class="dash-results">
   </section>`);  
-}
+};
 
 $(document).on('click', '.nav-booking', generateBookingPage);
+
+const displayAvailRooms = () => {
+  const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
+  const availRooms = hotel.findAvailableRooms(date);
+
+  $('.dash-results').html('');
+  availRooms.forEach(room => createRoomCard(room.number, room.bedSize, room.numBeds, room.costPerNight))
+}
+
+//swap room num for room type once done debugging
+//currently not finding right avail rooms. 
+const createRoomCard = (roomNum, bedSize, numBeds, cost) => {
+  $('.dash-results').append(`<section class='room-card'>
+    <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
+    <p class="dash-p-roomType">Room Number:${roomNum}</p>
+    <p class="dash-p-bedSize">Bed Size:${bedSize}</p>
+    <p class="dash-p-numBeds">Number of Beds:${numBeds}</p>
+    <p class="dash-p-cost">Cost:${cost}</p>
+    <button class="dash-button-book">Book</
+    </section>`);
+};
+
+$(document).on('change', '.dash-input-date', displayAvailRooms);
 
 // const selectedBtnStyle = (btn) => {
 //   //this function is to preserve the site button styling without removing focus styles on the page switching buttons 
