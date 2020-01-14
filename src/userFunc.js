@@ -41,7 +41,7 @@ const linkUser = (username, userType, userData) => {
 const unpackData = (username, userType, data) => {
   const userInst = linkUser(username, userType, data[0].users);
   const bookingInst = data[2].bookings.map(booking => new Booking(booking));
-  const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, bookingInst);
+  const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, bookingInst, data[0].users);
 
   bookings = bookingInst;
   hotel = hotelInst;
@@ -49,11 +49,11 @@ const unpackData = (username, userType, data) => {
 
   if (userType === 'manager') {
     generateManagerPage();
-    displayUserResv('manager');
+    displayManagerResv();
   } else {
     generateUserPage();
     // selectedBtnStyle('nav-booking');
-    displayUserResv('user');
+    displayUserResv();
   }
 };
 
@@ -104,18 +104,18 @@ const generateManagerPage = () => {
     </section>`);
 };
 
-const displayUserResv = (userType) => {
-  if (userType === 'manager') {
-    const currDate = fetchCurrDate();
-    const allRes = hotel.findReservationsByDate(currDate);
-    generateManagerPage()
-    createUserRes(allRes);
-  } else {
-    generateUserPage()
-    const userResInst = user.findPersonalReservations(hotel);
-    createUserRes(userResInst);
-  }
+const displayUserResv = () => {
+  generateUserPage()
+  const userResInst = user.findPersonalReservations(hotel);
+  createUserRes(userResInst);
 };
+
+const displayManagerResv = () => {
+  const currDate = fetchCurrDate();
+  const allRes = hotel.findReservationsByDate(currDate);
+  generateManagerPage()
+  createUserRes(allRes);
+}
 
 const fetchCurrDate = () => {
   let today = new Date();
@@ -140,6 +140,7 @@ const createUserRes = (bookings) => {
 };
 
 $(document).on('click', '.nav-reservation', displayUserResv);
+$(document).on('click', '.nav-avail', displayManagerResv);
 
 const fetchUserStats = () => {
   const userRes = user.findPersonalReservations(hotel);
@@ -158,7 +159,25 @@ const displayUserStats = (rewardsStat, user) => {
     </section>`);
 };
 
+const fetchOpStats = () => {
+  const currDate = fetchCurrDate();
+  const pctBooked = user.calcPercRoomsBooked(hotel, currDate);
+  const daysRev = user.calcTodaysRev(hotel, currDate);
+  displayOpStats(pctBooked, daysRev)
+}
+
+const displayOpStats = (pctBooked, totalRev) => {
+  $('.dash').html(`
+    <section class="dash-rewards">
+        <h3 class="rewards-h3">Total Revenue: ${totalRev}</h3>
+    </section>
+    <section class="dash-userInfo">
+        <h3 class='userInfo-h3'>Percent of Rooms Booked${pctBooked}</h3>
+    </section>`);
+}
+
 $(document).on('click', '.nav-account', fetchUserStats);
+$(document).on('click', '.nav-operations', fetchOpStats);
 
 const generateBookingPage = () => {
   $('.dash').html(`<form class="dash-form">
@@ -176,7 +195,41 @@ const generateBookingPage = () => {
   </section>`);  
 };
 
+const generateUserMngPage = () => {
+  $('.dash').html(`
+  <form class="dash-form">
+    <datalist id="user-list">
+    </datalist>
+    <input class="form-input-user" name="userSrc" type="text" list="user-list">
+    <h3 class="form-userspent">Spent:</h3>
+    <button class="form-book">Book</button>
+  </form>
+  <section class="dash-card-list">
+  </section>`);
+  createUserList();
+};
+
+const createUserList = () => {
+  hotel.guests.forEach(guest => {
+    $('#user-list').append(`<option value="${guest.name}">`)
+  })
+}
+
+const updateMngPage = () => {
+  $('.dash-card-list').html('');
+  const inputUser = $('.form-input-user').val();
+  const chosenUser = hotel.findGuest(inputUser);
+  // $('.form-username').text(inputUser);
+  user.setManagerPrivilege(chosenUser);
+  const userRes = user.findPersonalReservations(hotel);
+  const userSpent = user.calculateRewardsTotal(userRes, hotel);
+  $('.form-userspent').text(`Total Spent: ${userSpent}`);
+  createUserRes(userRes);
+}
+
 $(document).on('click', '.nav-booking', generateBookingPage);
+$(document).on('click', '.nav-manage', generateUserMngPage);
+$(document).on('input', '.form-input-user', updateMngPage);
 
 const displayAvailRooms = () => {
   const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
