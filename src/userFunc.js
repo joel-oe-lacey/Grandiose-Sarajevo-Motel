@@ -117,12 +117,16 @@ const displayManagerResv = () => {
   createUserRes(allRes);
 }
 
-const fetchCurrDate = () => {
+const fetchCurrDate = (type) => {
   let today = new Date();
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0'); 
   const yyyy = today.getFullYear();
-  today = yyyy + '/' + mm + '/' + dd;
+  if (type) {
+    today = yyyy + '-' + mm + '-' + dd;
+  } else {
+    today = yyyy + '/' + mm + '/' + dd;
+  }
   return today;
 }
 
@@ -193,6 +197,8 @@ const generateBookingPage = () => {
   </form>
   <section class="dash-results">
   </section>`);  
+  const currDate = fetchCurrDate('input');
+  $(".dash-input-date").attr("min", currDate)
 };
 
 const generateUserMngPage = () => {
