@@ -88,13 +88,13 @@ body {
   }
 }
 
-// User page move to separate file
 .main {
   height: 90%;
   width: 95%;
   display: flex;
   flex-direction: column;
   border-radius: 10%; 
+  background: linear-gradient($black, $black);
 }
 
 .nav {
@@ -105,32 +105,110 @@ body {
   flex-direction: row;
 }
 
-.dashboard {
-  height: 85%;
-  width: 100%;
-  background: linear-gradient($black, $black); 
-}
-
 .nav-btn {
-  width: 30%;
-  height: 100%;
-  font-size: 2em;
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  color: $lightBlue;
-  border-bottom: 3px solid $brown;
-  background: linear-gradient($darkBlue, $darkBlue); 
-
-  &:hover {
-    background: linear-gradient($black, $black);
+    width: 30%;
+    height: 100%;
+    font-size: 2em;
+    text-decoration: none;
+    background: transparent;
     border: none;
-  }
+    color: $lightBlue;
+    border-bottom: 3px solid $brown;
+    background: linear-gradient($darkBlue, $darkBlue); 
+    
+    &:hover {
+        background: linear-gradient($black, $black);
+        border: none;
+    }
 }
 
 .nav-logo {
-  width: 10%;
+    width: 10%;
+    height: 100%;
+    border-bottom: 3px solid $brown;
+    background: linear-gradient($darkBlue, $darkBlue); 
+}
+
+.dash-card-list {
   height: 100%;
-  border-bottom: 3px solid $brown;
-  background: linear-gradient($darkBlue, $darkBlue); 
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  overflow: scroll;
+}
+
+.dash {
+  height: 85%;
+  width: 100%;
+  background: linear-gradient($black, $black); 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+}
+
+.dash-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  height: 15%;
+  width: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin: 2%;
+}
+
+.room-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  height: 15%;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2%;
+}
+
+.dash-img {
+  height: 80%;
+  width: 15%;
+}
+
+.dash-rewards,
+.dash-userInfo {
+  color: $lightBlue;
+}
+
+.dash-form {
+  height: 15%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  
+  label {
+    color: $lightBlue;
+    font-size: 1.5em;
+  }
+
+  .dash-input-date,
+  .dash-select {
+    height: 40%;
+    width: 35%;
+    font-size: 1em;
+    border-radius: 2%;
+  }
+}
+
+.dash-results {
+  height: 85%;
+  width: 100%;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

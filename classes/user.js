@@ -8,9 +8,8 @@ class User {
     return hotel.bookings.filter(booking => booking.userID === this.id);
   }
 
-  calculateRewardsTotal(hotel) {
-    const userRes = this.findPersonalReservations(hotel);
-    return userRes.reduce((acc, res) => {
+  calculateRewardsTotal(reservations, hotel) {
+    return reservations.reduce((acc, res) => {
       hotel.rooms.forEach(room => {
         if (room.number === res.roomNumber) {
           acc += room.costPerNight;
