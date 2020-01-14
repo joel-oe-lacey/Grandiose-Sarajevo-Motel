@@ -160,9 +160,20 @@ body {
   margin: 2%;
 }
 
+.room-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  height: 15%;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2%;
+}
+
 .dash-img {
   height: 80%;
-  width: 30%;
+  width: 15%;
 }
 
 .dash-rewards,
@@ -196,4 +207,8 @@ body {
   height: 85%;
   width: 100%;
   overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
