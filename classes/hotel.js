@@ -1,8 +1,13 @@
 class Hotel {
-  constructor(name, rooms, bookings) {
+  constructor(name, rooms, bookings, allGuests) {
     this.name = name;
     this.rooms = rooms;
-    this.bookings = bookings;    
+    this.bookings = bookings;
+    this.guests = allGuests;   
+  }
+
+  findGuest(username) {
+    return this.guests.find(guest => guest.name === username);
   }
 
   findReservationsByDate(date) {
