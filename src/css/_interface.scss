@@ -126,7 +126,8 @@
   height: 40%;
 }
 
-.dash-button-book {
+.dash-button-book,
+.dash-button-delete {
   @extend .login-submit;  
   background-color: $darkBlue; 
 }
