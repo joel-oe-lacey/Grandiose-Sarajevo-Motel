@@ -2,7 +2,7 @@ import chai from 'chai';
 const expect = chai.expect;
 import User from '../classes/user.js';
 import Hotel from '../classes/hotel.js';
-import Booking from '../classes/booking.js';
+
 let roomData = [{
   number: 1,
   roomType: "residential suite",
@@ -50,15 +50,14 @@ let bookingData = [{
 }]
 
 describe('User', function () {
-  let user, bookings, hotel;
+  let user, hotel;
 
   beforeEach(() => {
     user = new User({
       id: 1,
       name: "Leatha Ullrich"
     });
-    bookings = bookingData.map(booking => new Booking(booking));
-    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookings);
+    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookingData);
   });
 
   it('should be a function', () => {
@@ -92,7 +91,6 @@ describe('User', function () {
 
   it('should calculate total amount spent', () => {
     const userRes = user.findPersonalReservations(hotel);
-
-    expect(user.calculateRewardsTotal(userRes, hotel)).to.equal(849.54);
+    expect(user.calculateRewardsTotal(userRes, hotel)).to.equal(850);
   });
 })

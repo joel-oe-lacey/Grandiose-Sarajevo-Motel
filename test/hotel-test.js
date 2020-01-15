@@ -1,7 +1,7 @@
 import chai from 'chai';
 const expect = chai.expect;
 import Hotel from '../classes/hotel.js';
-import Booking from '../classes/booking.js';
+
 let roomData = [{
   number: 1,
   roomType: "residential suite",
@@ -65,11 +65,10 @@ let bookingData = [{
 
 
 describe('Hotel', function () {
-  let bookings, hotel;
+  let hotel;
 
   beforeEach(() => {
-    bookings = bookingData.map(booking => new Booking(booking));
-    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookings);
+    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookingData);
   });
 
   it('should be a function', () => {
@@ -124,7 +123,7 @@ describe('Hotel', function () {
   });
 
   it('should be able to filter rooms by type', () => {
-    expect(hotel.filterRooms("single room")).to.deep.equal([{
+    expect(hotel.filterRooms(roomData, "single room")).to.deep.equal([{
       number: 3,
       roomType: "single room",
       bidet: false,

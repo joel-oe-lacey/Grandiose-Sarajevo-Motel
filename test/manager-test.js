@@ -2,7 +2,6 @@ import chai from 'chai';
 const expect = chai.expect;
 import Manager from '../classes/manager.js';
 import Hotel from '../classes/hotel.js';
-import Booking from '../classes/booking.js';
 
 let roomData = [{
   number: 1,
@@ -67,11 +66,10 @@ let bookingData = [{
 let mngData = { id: 51, name: 'mr.manager' };
 
 describe('Manager', function () {
-  let manager, bookings, hotel;
+  let manager, hotel;
 
   beforeEach(() => {
-    bookings = bookingData.map(booking => new Booking(booking));
-    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookings);
+    hotel = new Hotel('Grandiose Sarajevo Motel', roomData, bookingData);
     manager = new Manager(mngData);
   });
 
@@ -92,6 +90,6 @@ describe('Manager', function () {
   });
 
   it('should be able to calculate revenue for today', () => {
-    expect(manager.calcTodaysRev(hotel, '2020/01/10')).to.deep.equal(849.54);
+    expect(manager.calcTodaysRev(hotel, '2020/01/10')).to.deep.equal(850);
   });
 })

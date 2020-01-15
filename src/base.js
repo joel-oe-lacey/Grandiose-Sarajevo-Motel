@@ -2,7 +2,6 @@ import $ from 'jquery';
 import User from '../classes/user.js';
 import Manager from '../classes/manager.js';
 import Hotel from '../classes/hotel.js';
-import Booking from '../classes/booking.js';
 let user, hotel;
 
 const validateLogin = (e) => {
@@ -40,8 +39,7 @@ const linkUser = (username, userType, userData) => {
 
 const unpackData = (username, userType, data) => {
   const userInst = linkUser(username, userType, data[0].users);
-  const bookingInst = data[2].bookings.map(booking => new Booking(booking));
-  const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, bookingInst, data[0].users);
+  const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, data[2].bookings, data[0].users);
 
   hotel = hotelInst;
   user = userInst;
@@ -285,9 +283,9 @@ const createRoomCard = (roomNum, roomType, bedSize, numBeds, cost) => {
   $('.dash-results').append(`<section class='room-card'>
     <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
     <p class="dash-p-roomType">${roomType}</p>
-    <p class="dash-p-bedSize">Bed Size:${bedSize}</p>
-    <p class="dash-p-numBeds">Number of Beds:${numBeds}</p>
-    <p class="dash-p-cost">Cost:${cost}</p>
+    <p class="dash-p-bedSize">Bed Size: ${bedSize}</p>
+    <p class="dash-p-numBeds">Number of Beds: ${numBeds}</p>
+    <p class="dash-p-cost">Cost: $${cost}</p>
     <button class="dash-button-book" id="${roomNum}">Book</
     </section>`);
 };
