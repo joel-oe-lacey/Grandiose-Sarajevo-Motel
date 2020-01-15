@@ -3,18 +3,18 @@ import User from '../classes/user.js';
 import Manager from '../classes/manager.js';
 import Hotel from '../classes/hotel.js';
 import Booking from '../classes/booking.js';
-let user, bookings, hotel;
+let user, hotel;
 
 const validateLogin = (e) => {
   e.preventDefault()
   const username = $('.login-username').val();
   const password = $('.login-password').val();
 
-  if (username && password === 'overlook2019') {
+  if ((username.includes('customer') || username.includes('manager')) && password === 'overlook2019') {
     checkUserType(username);
     fetchCurrDate();
   } else {
-    console.log('Please enter value');
+    $('.login-alerts').text('Please enter a valid username & password');
   }
 };
 
@@ -31,7 +31,7 @@ $('.login-submit').on('click', validateLogin);
 const linkUser = (username, userType, userData) => {
   if (userType === 'user') {
     const userID = username.match(/\d+/)[0];
-    const userInfo = userData.find(user => user.id === parseInt(userID));
+    const userInfo = userData.find(user => user.id === Number(userID));
     return new User(userInfo);
   } else {
     return new Manager({id: 51, name: 'mr.manager'});
@@ -43,7 +43,6 @@ const unpackData = (username, userType, data) => {
   const bookingInst = data[2].bookings.map(booking => new Booking(booking));
   const hotelInst = new Hotel('Grandiose Sarajevo Motel', data[1].rooms, bookingInst, data[0].users);
 
-  bookings = bookingInst;
   hotel = hotelInst;
   user = userInst;
 
@@ -52,7 +51,6 @@ const unpackData = (username, userType, data) => {
     displayManagerResv();
   } else {
     generateUserPage();
-    // selectedBtnStyle('nav-booking');
     displayUserResv();
   }
 };
@@ -75,7 +73,6 @@ const retrieveUserData = (username, userType) => {
     })
 };
 
-//refactor to single function?
 const generateUserPage = () => {
   $('body').html(`<section class="main">
     <nav class="nav">
@@ -113,30 +110,58 @@ const displayUserResv = () => {
 const displayManagerResv = () => {
   const currDate = fetchCurrDate();
   const allRes = hotel.findReservationsByDate(currDate);
-  generateManagerPage()
+  generateManagerPage();
   createUserRes(allRes);
 }
 
-const fetchCurrDate = () => {
+const fetchCurrDate = (type) => {
   let today = new Date();
   const dd = String(today.getDate()).padStart(2, '0');
   const mm = String(today.getMonth() + 1).padStart(2, '0'); 
   const yyyy = today.getFullYear();
-  today = yyyy + '/' + mm + '/' + dd;
+  if (type) {
+    today = yyyy + '-' + mm + '-' + dd;
+  } else {
+    today = yyyy + '/' + mm + '/' + dd;
+  }
   return today;
 }
 
-const createResCard = (resDate, roomNum, roomType) => {
+const createResCard = (resDate, roomNum) => {
   $('.dash-card-list').append(`<section class='dash-card'>
     <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
     <p class="dash-p-resDate">${resDate}</p>
     <p class="dash-p-roomNum">Room Number: ${roomNum}</p>
-    <p class="dash-p-roomType">${roomType}</p>
+    <p></p>
+    <p></p>
+    </section>
+    </section>`);
+};
+
+const createMngResCard = (resDate, roomNum, id) => {
+  $('.dash-card-list').append(`<section class='dash-card'>
+    <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
+    <p class="dash-p-resDate">${resDate}</p>
+    <p class="dash-p-roomNum">Room Number: ${roomNum}</p>
+    <button class="dash-button-delete" id="${id}">Delete</button>
+    </section>
     </section>`);
 };
 
 const createUserRes = (bookings) => {
-  bookings.forEach(booking => createResCard(booking.date, booking.roomNumber, 'test'))
+  bookings.forEach(booking => createResCard(booking.date, booking.roomNumber))
+};
+
+const createManagerRes = (bookings) => { 
+  const today = new Date(fetchCurrDate());
+  bookings.forEach(booking => {
+    const bookingDate = new Date(booking.date)
+    if (today > bookingDate) {
+      createResCard(booking.date, booking.roomNumber)
+    } else {
+      createMngResCard(booking.date, booking.roomNumber, booking.id)
+    }
+  })
 };
 
 $(document).on('click', '.nav-reservation', displayUserResv);
@@ -149,13 +174,11 @@ const fetchUserStats = () => {
 };
 
 const displayUserStats = (rewardsStat, user) => {
-  //need to build out more with more info, styling dependent on time
   $('.dash').html(`
-    <section class="dash-rewards">
-        <h3 class="rewards-h3">Total Spent: ${rewardsStat}</h3>
-    </section>
-    <section class="dash-userInfo">
-        <h3 class='userInfo-h3'>${user}</h3>
+    <section class="dash-stats">
+        <h3 class='userInfo-h3'>Hello ${user}.</h3>
+        <h3>Thank you for staying with us, your business is valued.</h3>
+        <h3 class="rewards-h3">Total Rewards: ${rewardsStat}</h3>
     </section>`);
 };
 
@@ -168,11 +191,10 @@ const fetchOpStats = () => {
 
 const displayOpStats = (pctBooked, totalRev) => {
   $('.dash').html(`
-    <section class="dash-rewards">
-        <h3 class="rewards-h3">Total Revenue: ${totalRev}</h3>
-    </section>
-    <section class="dash-userInfo">
-        <h3 class='userInfo-h3'>Percent of Rooms Booked${pctBooked}</h3>
+    <section class="dash-stats">
+        <h3>The ${hotel.name}</h3>
+        <h3 class="rewards-h3">Total Revenue: $${totalRev}</h3>
+        <h3 class='userInfo-h3'>Percent of Rooms Booked: % ${pctBooked * 100}</h3>
     </section>`);
 }
 
@@ -193,6 +215,8 @@ const generateBookingPage = () => {
   </form>
   <section class="dash-results">
   </section>`);  
+  const currDate = fetchCurrDate('input');
+  $(".dash-input-date").attr("min", currDate)
 };
 
 const generateUserMngPage = () => {
@@ -201,8 +225,8 @@ const generateUserMngPage = () => {
     <datalist id="user-list">
     </datalist>
     <input class="form-input-user" name="userSrc" type="text" list="user-list">
-    <h3 class="form-userspent">Spent:</h3>
-    <button class="form-book">Book</button>
+    <h3 class="form-userspent">Please select a user.</h3>
+    <button class="form-book hidden">Make a Reservation</button>
   </form>
   <section class="dash-card-list">
   </section>`);
@@ -215,47 +239,139 @@ const createUserList = () => {
   })
 }
 
+const filterUserResByType = () => {
+  const roomType = $('.dash-select').val();
+  const availRooms = findRoomsByDate();
+  const filteredRooms = hotel.filterRooms(availRooms, roomType)
+  updateRoomDisplay(filteredRooms);
+}
+
 const updateMngPage = () => {
   $('.dash-card-list').html('');
+  $('.form-book').removeClass('hidden')
   const inputUser = $('.form-input-user').val();
   const chosenUser = hotel.findGuest(inputUser);
-  // $('.form-username').text(inputUser);
   user.setManagerPrivilege(chosenUser);
   const userRes = user.findPersonalReservations(hotel);
   const userSpent = user.calculateRewardsTotal(userRes, hotel);
   $('.form-userspent').text(`Total Spent: ${userSpent}`);
-  createUserRes(userRes);
+  createManagerRes(userRes);
 }
 
 $(document).on('click', '.nav-booking', generateBookingPage);
 $(document).on('click', '.nav-manage', generateUserMngPage);
 $(document).on('input', '.form-input-user', updateMngPage);
 
-const displayAvailRooms = () => {
+const findRoomsByDate = () => {
   const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
-  const availRooms = hotel.findAvailableRooms(date);
-
-  $('.dash-results').html('');
-  availRooms.forEach(room => createRoomCard(room.number, room.bedSize, room.numBeds, room.costPerNight))
+  return hotel.findAvailableRooms(date);
 }
 
-//swap room num for room type once done debugging
-//currently not finding right avail rooms. 
-const createRoomCard = (roomNum, bedSize, numBeds, cost) => {
+const displayAvailRooms = () => {
+  const availRooms = findRoomsByDate();
+  updateRoomDisplay(availRooms);
+}
+
+const updateRoomDisplay = (rooms) => {
+  $('.dash-results').html('');
+  if (rooms.length) {
+    rooms.forEach(room => createRoomCard(room.number, room.roomType, room.bedSize, room.numBeds, room.costPerNight))
+  } else {
+    $('.dash-results').append('<h2>Our sincerest apologies, it seems there are no rooms available for the date you’ve selected. I’d give you my room if I had one, but I don’t, since sleeping would be a moment spent not helping our most valued patrons. Please do consider choosing another date to stay with us and I will personally order you a cake from Mendl’s to show my gratitude.</h2>');
+  }
+}
+
+const createRoomCard = (roomNum, roomType, bedSize, numBeds, cost) => {
   $('.dash-results').append(`<section class='room-card'>
     <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
-    <p class="dash-p-roomType">Room Number:${roomNum}</p>
+    <p class="dash-p-roomType">${roomType}</p>
     <p class="dash-p-bedSize">Bed Size:${bedSize}</p>
     <p class="dash-p-numBeds">Number of Beds:${numBeds}</p>
     <p class="dash-p-cost">Cost:${cost}</p>
-    <button class="dash-button-book">Book</
+    <button class="dash-button-book" id="${roomNum}">Book</
     </section>`);
 };
 
 $(document).on('change', '.dash-input-date', displayAvailRooms);
+$(document).on('change', '.dash-select', filterUserResByType);
 
-// const selectedBtnStyle = (btn) => {
-//   //this function is to preserve the site button styling without removing focus styles on the page switching buttons 
-//   $(`.${btn}`).css({
-//     "background": "linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7))", "border": "none"});
-// }
+const bookingDisplay = (status) => {
+  if (status === 'pending') {
+    $('.dash').html(`
+    <section class="dash-stats">
+        <h3>Order Pending</h3>
+        <h3>Please Wait</h3>
+    </section>`);
+  } else {
+    $('.dash').html(`
+    <section class="dash-stats">
+        <h3>Thanks for booking! Here are your booking details</h3>
+        <h3>Booking Date: ${status.date}</h3>
+        <h3>Room Number: ${status.roomNumber}</h3>
+        <h3>We look forward to your stay</h3>
+    </section>`);
+  }
+};
+
+const deleteDisplay = (status) => {
+  $('.dash').html(`
+    <section class="dash-stats">
+        <h3>Everything is ${status.statusText}</h3>
+        <h3>Order Cancellation Successful</h3>
+    </section>`);
+};
+
+const createBooking = (id) => {
+  const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
+  const bookingData = {
+    'userID': user.id,
+    date,
+    'roomNumber': Number(id),
+  };
+
+  fetch('https://fe-apps.herokuapp.com/api/v1/overlook/1904/bookings/bookings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookingData),
+  })
+    .then(response => response.json())
+    .then(json => bookingDisplay(json))
+    .catch(err => console.log(err));
+
+  bookingDisplay('pending');
+}
+
+const deleteBooking = (id) => {
+  let bookingDelete;
+  if (typeof id === 'number') {
+    bookingDelete = {
+      'id': Number(id)
+    }
+  } else {
+    bookingDelete = {
+      'id': String(id)
+    }
+  }
+
+  fetch('https://fe-apps.herokuapp.com/api/v1/overlook/1904/bookings/bookings', {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookingDelete),
+  })
+    .then(response => deleteDisplay(response))
+    .catch(err => console.log(err));
+
+  bookingDisplay('pending');
+}
+
+$(document).on('click', '.dash-button-book', function() {
+  createBooking(this.id);
+});
+$(document).on('click', '.dash-button-delete', function () {
+  deleteBooking(this.id);
+});
+$(document).on('click', '.form-book', generateBookingPage);
