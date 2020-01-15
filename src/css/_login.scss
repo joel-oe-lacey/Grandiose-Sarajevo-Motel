@@ -1,6 +1,6 @@
 .login {
   background: linear-gradient($darkBlue, $darkBlue);
-  @include heightWidth(60%, 40%);
+  @include heightWidth(75%, 40%);
   @include flexDirCenter(column);
   border-radius: 2%; 
 }
@@ -11,8 +11,14 @@
 
 .login-form {
   justify-content: space-around;
-  @include flexDirCenter(column);
+  display: flex;
+  flex-direction: column;
   @include heightWidth(50%, 80%);
+
+  h3 {
+    font-size: 1em;
+    color: $brown;
+  }
 }
 
 .login-username,
