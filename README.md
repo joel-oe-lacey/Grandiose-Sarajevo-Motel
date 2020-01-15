@@ -10,7 +10,6 @@ The Grandiose Sarajevo Motel is a template hotel application themed around the G
 
 ## Screenshots
 ![Login](./src/images/login.png)
-![User Interaction](./src/images/user.png)
 ![Manager Interaction](./src/images/manager.png)
 
 ## Tools Used to Build Project
