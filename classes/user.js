@@ -9,14 +9,14 @@ class User {
   }
 
   calculateRewardsTotal(reservations, hotel) {
-    return reservations.reduce((acc, res) => {
+    return Math.round(reservations.reduce((acc, res) => {
       hotel.rooms.forEach(room => {
         if (room.number === res.roomNumber) {
           acc += room.costPerNight;
         }
       });
       return acc;
-    }, 0).toFixed(2);
+    }, 0));
   }
 }
 
