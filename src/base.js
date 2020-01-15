@@ -94,7 +94,7 @@ const generateManagerPage = () => {
         <button class="nav-manage nav-btn">Manage Bookings</button>
         </nav>
       <section class="dash">
-      <section class= 'dash-card-list' ></section>
+      <section class='dash-results' ></section>
       </section>
     </section>`);
 };
@@ -105,11 +105,12 @@ const displayUserResv = () => {
   createUserRes(userResInst);
 };
 
+//refactor to display rooms instead of reservations 
+//need to call different generation function 
 const displayManagerResv = () => {
   const currDate = fetchCurrDate();
-  const allRes = hotel.findReservationsByDate(currDate);
-  generateManagerPage();
-  createUserRes(allRes);
+  const availRooms = hotel.findAvailableRooms(currDate);
+  updateRoomDisplay(availRooms, 'manager');
 }
 
 const fetchCurrDate = (type) => {
@@ -176,7 +177,7 @@ const displayUserStats = (rewardsStat, user) => {
     <section class="dash-stats">
         <h3 class='userInfo-h3'>Hello ${user}.</h3>
         <h3>Thank you for staying with us, your business is valued.</h3>
-        <h3 class="rewards-h3">Total Rewards: ${rewardsStat}</h3>
+        <h3 class="rewards-h3">Total Rewards: $${rewardsStat}</h3>
     </section>`);
 };
 
@@ -241,7 +242,7 @@ const filterUserResByType = () => {
   const roomType = $('.dash-select').val();
   const availRooms = findRoomsByDate();
   const filteredRooms = hotel.filterRooms(availRooms, roomType)
-  updateRoomDisplay(filteredRooms);
+  updateRoomDisplay(filteredRooms, 'user');
 }
 
 const updateMngPage = () => {
@@ -262,32 +263,47 @@ $(document).on('input', '.form-input-user', updateMngPage);
 
 const findRoomsByDate = () => {
   const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
-  return hotel.findAvailableRooms(date);
+  const today = fetchCurrDate();
+  if (date) {
+    return hotel.findAvailableRooms(date);
+  } else {
+    return hotel.findAvailableRooms(today);    
+  }
 }
 
 const displayAvailRooms = () => {
   const availRooms = findRoomsByDate();
-  updateRoomDisplay(availRooms);
+  updateRoomDisplay(availRooms, 'user');
 }
 
-const updateRoomDisplay = (rooms) => {
+const updateRoomDisplay = (rooms, userType) => {
   $('.dash-results').html('');
   if (rooms.length) {
-    rooms.forEach(room => createRoomCard(room.number, room.roomType, room.bedSize, room.numBeds, room.costPerNight))
+    rooms.forEach(room => createRoomCard(room.number, room.roomType, room.bedSize, room.numBeds, room.costPerNight, userType))
   } else {
     $('.dash-results').append('<h2>Our sincerest apologies, it seems there are no rooms available for the date you’ve selected. I’d give you my room if I had one, but I don’t, since sleeping would be a moment spent not helping our most valued patrons. Please do consider choosing another date to stay with us and I will personally order you a cake from Mendl’s to show my gratitude.</h2>');
   }
 }
 
-const createRoomCard = (roomNum, roomType, bedSize, numBeds, cost) => {
+const createRoomCard = (roomNum, roomType, bedSize, numBeds, cost, userType) => {
+  if (userType === 'user') {
   $('.dash-results').append(`<section class='room-card'>
     <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
     <p class="dash-p-roomType">${roomType}</p>
     <p class="dash-p-bedSize">Bed Size: ${bedSize}</p>
     <p class="dash-p-numBeds">Number of Beds: ${numBeds}</p>
     <p class="dash-p-cost">Cost: $${cost}</p>
-    <button class="dash-button-book" id="${roomNum}">Book</
+    <button class="dash-button-book" id="${roomNum}">Book</button>
     </section>`);
+  } else {
+    $('.dash-results').append(`<section class='room-card'>
+    <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
+    <p class="dash-p-roomType">${roomType}</p>
+    <p class="dash-p-bedSize">Bed Size: ${bedSize}</p>
+    <p class="dash-p-numBeds">Number of Beds: ${numBeds}</p>
+    <p class="dash-p-cost">Cost: $${cost}</p>
+    </section>`);   
+  }
 };
 
 $(document).on('change', '.dash-input-date', displayAvailRooms);
