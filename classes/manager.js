@@ -13,7 +13,7 @@ class Manager extends User {
 
   calcTodaysRev(hotel, date) {
     const todaysRes = hotel.findReservationsByDate(date);
-    return this.calculateRewardsTotal(todaysRes, hotel).toFixed(2);
+    return this.calculateRewardsTotal(todaysRes, hotel);
   }
 
   setManagerPrivilege(user) {

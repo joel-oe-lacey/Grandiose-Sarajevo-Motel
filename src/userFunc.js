@@ -113,7 +113,7 @@ const displayUserResv = () => {
 const displayManagerResv = () => {
   const currDate = fetchCurrDate();
   const allRes = hotel.findReservationsByDate(currDate);
-  generateManagerPage()
+  generateManagerPage();
   createUserRes(allRes);
 }
 
@@ -173,10 +173,10 @@ const fetchOpStats = () => {
 const displayOpStats = (pctBooked, totalRev) => {
   $('.dash').html(`
     <section class="dash-rewards">
-        <h3 class="rewards-h3">Total Revenue: ${totalRev}</h3>
+        <h3 class="rewards-h3">Total Revenue: $${totalRev}</h3>
     </section>
     <section class="dash-userInfo">
-        <h3 class='userInfo-h3'>Percent of Rooms Booked${pctBooked}</h3>
+        <h3 class='userInfo-h3'>Percent of Rooms Booked: %${pctBooked * 100}</h3>
     </section>`);
 }
 
@@ -221,6 +221,13 @@ const createUserList = () => {
   })
 }
 
+const filterUserResByType = () => {
+  const roomType = $('.dash-select').val();
+  const availRooms = findRoomsByDate();
+  const filteredRooms = hotel.filterRooms(availRooms, roomType)
+  updateRoomDisplay(filteredRooms);
+}
+
 const updateMngPage = () => {
   $('.dash-card-list').html('');
   const inputUser = $('.form-input-user').val();
@@ -237,25 +244,31 @@ $(document).on('click', '.nav-booking', generateBookingPage);
 $(document).on('click', '.nav-manage', generateUserMngPage);
 $(document).on('input', '.form-input-user', updateMngPage);
 
-const displayAvailRooms = () => {
+const findRoomsByDate = () => {
   const date = $('.dash-input-date').val().replace('-', '/').replace('-', '/');
-  const availRooms = hotel.findAvailableRooms(date);
+  return hotel.findAvailableRooms(date);
+}
+
+const displayAvailRooms = () => {
+  const availRooms = findRoomsByDate();
+  updateRoomDisplay(availRooms);
+}
+
+const updateRoomDisplay = (rooms) => {
   $('.dash-results').html('');
-  if (availRooms.length) {
-    availRooms.forEach(room => createRoomCard(room.number, room.bedSize, room.numBeds, room.costPerNight))
+  if (rooms.length) {
+    rooms.forEach(room => createRoomCard(room.roomType, room.bedSize, room.numBeds, room.costPerNight))
   } else {
     $('.dash-results').append('<h2>Our sincerest apologies, it seems there are no rooms available for the date you’ve selected. I’d give you my room if I had one, but I don’t, since sleeping would be a moment spent not helping our most valued patrons. Please do consider choosing another date to stay with us and I will personally order you a cake from Mendl’s to show my gratitude.</h2>');
   }
 }
 
-
-
 //swap room num for room type once done debugging
 //currently not finding right avail rooms. 
-const createRoomCard = (roomNum, bedSize, numBeds, cost) => {
+const createRoomCard = (roomType, bedSize, numBeds, cost) => {
   $('.dash-results').append(`<section class='room-card'>
     <img class="dash-img" src="./images/room-logo.svg" alt="Front facing view of an opulent hotel">
-    <p class="dash-p-roomType">Room Number:${roomNum}</p>
+    <p class="dash-p-roomType">${roomType}</p>
     <p class="dash-p-bedSize">Bed Size:${bedSize}</p>
     <p class="dash-p-numBeds">Number of Beds:${numBeds}</p>
     <p class="dash-p-cost">Cost:${cost}</p>
@@ -264,6 +277,7 @@ const createRoomCard = (roomNum, bedSize, numBeds, cost) => {
 };
 
 $(document).on('change', '.dash-input-date', displayAvailRooms);
+$(document).on('change', '.dash-select', filterUserResByType);
 
 // const selectedBtnStyle = (btn) => {
 //   //this function is to preserve the site button styling without removing focus styles on the page switching buttons 

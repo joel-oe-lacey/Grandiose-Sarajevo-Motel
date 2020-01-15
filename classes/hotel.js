@@ -21,9 +21,9 @@ class Hotel {
     return this.rooms.filter(room => !reservations.includes(room.number))
   }
 
-  filterRooms(type) {
+  filterRooms(rooms, type) {
     //filter on available rooms array then readd to dom based on that
-    return this.rooms.filter(room => room.roomType === type);
+    return rooms.filter(room => room.roomType === type);
   }
 }
 
