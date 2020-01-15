@@ -1,21 +1,18 @@
 .main {
-  height: 90%;
-  width: 95%;
+  @include heightWidth(90%, 95%);
   display: flex;
   flex-direction: column;
   background: linear-gradient($black, $black);
 }
 
 .nav {
-  height: 15%;
-  width: 100%;
+  @include heightWidth(15%, 100%);
   display: flex;
   flex-direction: row;
 }
 
 .nav-btn {
-  width: 30%;
-  height: 100%;
+  @include heightWidth(100%, 30%);
   font-size: 2em;
   text-decoration: none;
   background: transparent;
@@ -32,15 +29,13 @@
 }
 
 .nav-logo {
-  width: 10%;
-  height: 100%;
+  @include heightWidth(100%, 10%);
   border-bottom: 3px solid $brown;
   background: linear-gradient($darkBlue, $darkBlue); 
 }
 
 .dash-card-list {
-  height: 100%;
-  width: 100%;
+  @include heightWidth(100%, 100%);
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
@@ -49,11 +44,8 @@
 }
 
 .dash {
-  height: 85%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include heightWidth(85%, 100%);
+  @include flexDirCenter(column);
   overflow: scroll;
 
   h3 {
@@ -62,43 +54,34 @@
 }
 
 .dash-stats {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
+  @include flexDirCenter(column);
   justify-content: space-around;
   height: 100%;
 
   h3 {
     font-size: 1.5em;
-    color: $lightBlue;
+    color: $brown;
   }
 }
 
 .dash-card {
   background: linear-gradient($lightBlue, $lightBlue); 
-  height: 15%;
-  width: 40%;
-  display: flex;
-  flex-direction: row;
+  @include heightWidth(15%, 40%);
+  @include flexDirCenter(row);
   justify-content: space-around;
-  align-items: center;
   margin: 2%;
 }
 
 .room-card {
   background: linear-gradient($lightBlue, $lightBlue); 
-  height: 15%;
-  width: 90%;
-  display: flex;
-  flex-direction: row;
+  @include heightWidth(15%, 90%);
+  @include flexDirCenter(row);
   justify-content: space-around;
-  align-items: center;
   margin: 2%;
 }
 
 .dash-img {
-  height: 80%;
-  width: 15%;
+  @include heightWidth(80%, 15%);
   background-color: $darkBlue;
   border-radius: 10%;
 }
@@ -109,12 +92,9 @@
 }
 
 .dash-form {
-  height: 15%;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
+  @include heightWidth(15%, 100%);
+  @include flexDirCenter(row);
   justify-content: space-around;
-  align-items: center;
   
   label,
   h3 {
@@ -124,24 +104,19 @@
 
   .dash-input-date,
   .dash-select {
-    height: 40%;
-    width: 35%;
+    @include heightWidth(40%, 35%);
     font-size: 1em;
     border-radius: 2%;
   }
 }
 
 .dash-results {
-  height: 85%;
-  width: 100%;
+  @include heightWidth(85%, 100%);
   overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  @include flexDirCenter(column);
 
   h2 {
-    width: 80%;
-    height: 80%;
+  @include heightWidth(15%, 80%);
     color: $lightBlue;
   }
 }
