@@ -3,6 +3,7 @@ import User from './user.js';
 class Manager extends User {
   constructor(userData) {
     super(userData)
+    this.isManager = true;
   }
 
   calcPercRoomsBooked(hotel, date) {
@@ -13,7 +14,7 @@ class Manager extends User {
 
   calcTodaysRev(hotel, date) {
     const todaysRes = hotel.findReservationsByDate(date);
-    return this.calculateRewardsTotal(todaysRes, hotel).toFixed(2);
+    return this.calculateRewardsTotal(todaysRes, hotel);
   }
 
   setManagerPrivilege(user) {

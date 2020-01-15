@@ -1,0 +1,137 @@
+.main {
+  @include heightWidth(90%, 95%);
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient($black, $black);
+}
+
+.nav {
+  @include heightWidth(15%, 100%);
+  display: flex;
+  flex-direction: row;
+}
+
+.nav-btn {
+  @include heightWidth(100%, 30%);
+  font-size: 2em;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  color: $lightBlue;
+  border-bottom: 3px solid $brown;
+  background: linear-gradient($darkBlue, $darkBlue); 
+  
+  &:hover {
+    background: linear-gradient($black, $black);
+    border: none;
+    cursor: pointer;
+  }
+}
+
+.nav-logo {
+  @include heightWidth(100%, 10%);
+  border-bottom: 3px solid $brown;
+  background: linear-gradient($darkBlue, $darkBlue); 
+}
+
+.dash-card-list {
+  @include heightWidth(100%, 100%);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  overflow: scroll;
+}
+
+.dash {
+  @include heightWidth(85%, 100%);
+  @include flexDirCenter(column);
+  overflow: scroll;
+
+  h3 {
+    justify-content: center;
+  }
+}
+
+.dash-stats {
+  @include flexDirCenter(column);
+  justify-content: space-around;
+  height: 100%;
+
+  h3 {
+    font-size: 1.5em;
+    color: $brown;
+  }
+}
+
+.dash-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  @include heightWidth(15%, 40%);
+  @include flexDirCenter(row);
+  justify-content: space-around;
+  margin: 2%;
+}
+
+.room-card {
+  background: linear-gradient($lightBlue, $lightBlue); 
+  @include heightWidth(15%, 90%);
+  @include flexDirCenter(row);
+  justify-content: space-around;
+  margin: 2%;
+}
+
+.dash-img {
+  @include heightWidth(80%, 15%);
+  background-color: $darkBlue;
+  border-radius: 10%;
+}
+
+.dash-rewards,
+.dash-userInfo {
+  color: $lightBlue;
+}
+
+.dash-form {
+  @include heightWidth(15%, 100%);
+  @include flexDirCenter(row);
+  justify-content: space-around;
+  
+  label,
+  h3 {
+    color: $lightBlue;
+    font-size: 1.5em;
+  }
+
+  .dash-input-date,
+  .dash-select {
+    @include heightWidth(40%, 35%);
+    font-size: 1em;
+    border-radius: 2%;
+  }
+}
+
+.dash-results {
+  @include heightWidth(85%, 100%);
+  overflow: scroll;
+  @include flexDirCenter(column);
+
+  h2 {
+  @include heightWidth(15%, 80%);
+    color: $lightBlue;
+  }
+}
+
+.form-input-user {
+  @extend .login-username;
+  height: 40%;
+}
+
+.dash-button-book,
+.dash-button-delete {
+  @extend .login-submit;  
+  background-color: $darkBlue; 
+}
+
+.hidden {
+  display: none;
+}

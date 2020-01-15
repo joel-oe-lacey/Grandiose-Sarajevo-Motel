@@ -15,15 +15,12 @@ class Hotel {
   }
 
   findAvailableRooms(date) {
-    //add rooms filter to an available rooms array for later filtering 
     const reservations = this.findReservationsByDate(date).map(res => res.roomNumber);
-
     return this.rooms.filter(room => !reservations.includes(room.number))
   }
 
-  filterRooms(type) {
-    //filter on available rooms array then readd to dom based on that
-    return this.rooms.filter(room => room.roomType === type);
+  filterRooms(rooms, type) {
+    return rooms.filter(room => room.roomType === type);
   }
 }
 

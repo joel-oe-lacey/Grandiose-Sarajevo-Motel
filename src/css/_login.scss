@@ -1,0 +1,61 @@
+.login {
+  background: linear-gradient($darkBlue, $darkBlue);
+  @include heightWidth(75%, 40%);
+  @include flexDirCenter(column);
+  border-radius: 2%; 
+}
+
+.login-img {
+  @include heightWidth(50%, 50%);
+}
+
+.login-form {
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  @include heightWidth(50%, 80%);
+
+  h3 {
+    font-size: 1em;
+    color: $brown;
+  }
+}
+
+.login-username,
+.login-password {
+  font-size: 1.5em;
+  height: 25%;
+  border: 1px solid $lightBlue;
+  color: $brown;
+  border-radius: 0.1rem;
+  background: transparent;
+  transition: box-shadow 300ms;
+  padding-left: 5%;
+
+  &:focus {
+    outline: none;
+    border: none;
+    box-shadow: 0.1rem 0.3rem 0.6rem $lightBlue;
+  }
+}
+
+::placeholder {
+  color: $lightBlue;
+}
+
+.login-submit,
+.form-book {
+  color: $lightBlue;
+  font-size: 2em;
+  text-decoration: none;
+  background: transparent;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.4s ease 0s;
+
+  &:hover {
+    color: $brown;
+    transition: all 0.4s ease 0s;
+    cursor: pointer;
+  }
+}
