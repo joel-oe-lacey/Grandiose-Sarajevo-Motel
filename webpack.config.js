@@ -34,7 +34,7 @@ module.exports = {
   // Below is needed for webpack-dev-server
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/login.html'
+      template: './src/base.html'
     })
   ],
   devServer: {

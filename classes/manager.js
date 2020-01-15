@@ -3,6 +3,7 @@ import User from './user.js';
 class Manager extends User {
   constructor(userData) {
     super(userData)
+    this.isManager = true;
   }
 
   calcPercRoomsBooked(hotel, date) {
