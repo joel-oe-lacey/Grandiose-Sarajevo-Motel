@@ -9,9 +9,9 @@ The Grandiose Sarajevo Motel is a template hotel application themed around the G
 - Sign in as any user ('Customer' + any number 1 through 50) or as a manager (manager), password for both is 'overlook2019'
 
 ## Screenshots
-![Homepage](./src/assets/homepage.png)
-![Details](./src/assets/details.png)
-![Browse](./src/assets/Interface_browse.gif)
+![Login](./src/images/login.png)
+![User Interaction](./src/images/user.png)
+![Manager Interaction](./src/images/manager.png)
 
 ## Tools Used to Build Project
 - [Mocha](https://mochajs.org/api/mocha)
