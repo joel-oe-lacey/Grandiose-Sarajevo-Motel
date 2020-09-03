@@ -13,7 +13,7 @@ const validateLogin = (e) => {
     checkUserType(username);
     fetchCurrDate();
   } else {
-    $('.login-alerts').text('Please enter a valid username & password');
+    $('.login-alerts').css({'visibility': 'visible'});
   }
 };
 

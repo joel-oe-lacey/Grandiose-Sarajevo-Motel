@@ -9,6 +9,10 @@
   @include heightWidth(50%, 50%);
 }
 
+.login-alerts {
+  visibility: hidden;
+}
+
 .login-form {
   justify-content: space-around;
   display: flex;
